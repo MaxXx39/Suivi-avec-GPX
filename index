@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Navigation Mystère</title>
+    
+    <!-- Mapbox GL JS -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+    
+    <!-- Turf.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        body { margin: 0; padding: 0; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #000; }
+        
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
+        /* HUD */
+        #hud {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            padding: 10px; pointer-events: none; z-index: 10;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* Bandeau d'instruction */
+        .instruction-panel {
+            background-color: #1b8d52; color: white; width: 95%; max-width: 500px;
+            padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            margin-top: 10px; display: flex; align-items: center; min-height: 70px; pointer-events: auto;
+        }
+
+        .direction-icon { font-size: 2.2rem; margin-right: 15px; width: 50px; text-align: center; }
+        .instruction-text { font-size: 1.3rem; font-weight: bold; line-height: 1.2; }
+
+        /* Info Distance */
+        .info-panel {
+            background-color: rgba(20, 20, 20, 0.90); color: #fff; padding: 8px 20px;
+            border-radius: 30px; margin-top: 10px; font-size: 1.1rem; font-weight: bold;
+            backdrop-filter: blur(5px); box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1); pointer-events: auto;
+        }
+
+        /* MENU FLOTTANT (Bas Gauche) */
+        #menu-container {
+            position: absolute; bottom: 30px; left: 20px; z-index: 100;
+            display: flex; flex-direction: column-reverse;
+            align-items: flex-start; pointer-events: auto;
+        }
+
+        #menu-toggle {
+            width: 56px; height: 56px; border-radius: 50%; background-color: white;
+            border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.3); color: #333;
+            font-size: 1.5rem; cursor: pointer; display: flex; justify-content: center; align-items: center;
+            transition: transform 0.2s;
+        }
+        #menu-toggle:active { transform: scale(0.9); }
+
+        #menu-content {
+            background: rgba(255, 255, 255, 0.95); padding: 15px; border-radius: 12px;
+            margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); width: 260px;
+            backdrop-filter: blur(10px); flex-direction: column; display: none; animation: slideUp 0.3s ease-out;
+        }
+        #menu-content.open { display: flex; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        #menu-content label { font-size: 0.9rem; color: #666; margin-bottom: 8px; font-weight: bold; display:block; margin-top:10px;}
+        #menu-content select, #menu-content input {
+            width: 100%; padding: 8px; font-size: 0.9rem; border-radius: 6px;
+            border: 1px solid #ccc; background: #fff; color: #333; outline: none; box-sizing: border-box;
+        }
+        
+        .file-upload-btn {
+            border: 2px dashed #ccc; padding: 10px; text-align: center; cursor: pointer; margin-top: 5px; font-size: 0.8rem; color: #555;
+        }
+
+        /* Overlay de Démarrage */
+        #start-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            z-index: 9999; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; color: white;
+            text-align: center; padding: 20px; box-sizing: border-box;
+        }
+
+        button.start-btn {
+            background: #00d2ff; color: #00334d; border: none; padding: 15px 40px;
+            font-size: 1.2rem; border-radius: 50px; font-weight: bold; margin-top: 30px;
+            cursor: pointer; box-shadow: 0 0 20px rgba(0, 210, 255, 0.5); transition: transform 0.2s;
+        }
+        button.start-btn:active { transform: scale(0.95); }
+        
+        #gps-status { margin-top: 10px; font-size: 0.9rem; color: #aaa; }
+        .reveal-popup { text-align: center; color: #333; }
+        .reveal-popup h1 { color: #d35400; margin: 0 0 5px 0; }
+        .loader {
+            border: 4px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 4px solid #fff;
+            width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 10px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- Écran d'accueil -->
+    <div id="start-overlay">
+        <i class="fas fa-route fa-4x" style="margin-bottom: 20px;"></i>
+        <h1>Destination Mystère</h1>
+        <p style="max-width: 300px; line-height: 1.5; margin-bottom:10px;">
+            Guidage réel. Destination secrète.
+        </p>
+        <div id="gps-check-msg" style="margin-top: 20px; font-weight: bold; color: #ffcc00;">
+            <div class="loader"></div> Vérification GPS...
+        </div>
+        <button id="btn-start" class="start-btn hidden" onclick="startNavigation()">C'EST PARTI !</button>
+    </div>
+
+    <!-- HUD Navigation -->
+    <div id="hud" class="hidden">
+        <!-- Bandeau Instruction -->
+        <div class="instruction-panel">
+            <div id="nav-icon" class="direction-icon"><i class="fas fa-location-arrow"></i></div>
+            <div id="nav-text" class="instruction-text">Calcul de l'itinéraire...</div>
+        </div>
+        
+        <!-- Info Distance -->
+        <div class="info-panel">
+            <i class="fas fa-flag-checkered"></i> <span id="distance-display">--</span>
+        </div>
+    </div>
+
+    <!-- MENU FLOTTANT (Bas Gauche) -->
+    <div id="menu-container" class="hidden">
+        <button id="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div id="menu-content">
+            <label for="destination-select">📍 Destination prédéfinie :</label>
+            <select id="destination-select">
+                <!-- Rempli par JS -->
+            </select>
+
+            <label>📁 Ou charger un GPX :</label>
+            <input type="file" id="gpx-input" accept=".gpx">
+            <div style="font-size:0.7rem; color:#888; margin-top:5px;">
+                Le GPX remplace la destination automatique.
+            </div>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <script>
+        // ============================================================
+        // CONFIGURATION
+        // ============================================================
+        mapboxgl.accessToken = 'pk.eyJ1IjoibWF4eHgzOSIsImEiOiJjbWk4amx6YWMwNTFpMmpzYWVkcjJ0dGJiIn0.UHWEl4YZP3i9BXewfeTzPQ'; 
+        
+        const DESTINATIONS = {
+            'A': { name: 'Destination A', coords: [5.954497, 46.575945] },
+            'B': { name: 'Destination B', coords: [6.016325, 46.534054] },
+            'C': { name: 'Destination C', coords: [6.571398, 46.543269] },
+            'D': { name: 'Destination D', coords: [6.125181, 46.242740] },
+            'E': { name: 'Destination E', coords: [6.284471, 46.419906] },
+            'F': { name: 'Destination F', coords: [4.646682, 43.701235] }
+        };
+
+        const VISIBILITY_RADIUS_KM = 2;
+
+        // Variables Globales
+        let currentDestination = DESTINATIONS['A'].coords; 
+        let map;
+        let userPos = null;
+        let isRevealed = false;
+        let geolocateControl;
+        let lastRouteFetchTime = 0;
+        let realDrivingDistanceText = "-- km"; 
+        let currentMarker = null; 
+        
+        // Variables Mode GPX
+        let isGPXMode = false;
+        let gpxRouteGeoJSON = null; // Stocke la géométrie complète du GPX
+
+        // --- 1. Initialisation ---
+        window.onload = function() {
+            const select = document.getElementById('destination-select');
+            for (const [key, value] of Object.entries(DESTINATIONS)) {
+                const option = document.createElement('option');
+                option.value = key;
+                option.text = value.name;
+                select.appendChild(option);
+            }
+
+            // Gestion changement destination (Mode Auto)
+            select.addEventListener('change', (e) => {
+                isGPXMode = false; // On quitte le mode GPX
+                document.getElementById('gpx-input').value = ""; // Reset input
+                
+                const newDestKey = e.target.value;
+                currentDestination = DESTINATIONS[newDestKey].coords;
+                resetNavigationState();
+                toggleMenu();
+            });
+
+            // Gestion import GPX
+            document.getElementById('gpx-input').addEventListener('change', handleGPXUpload);
+
+            checkGPS();
+        };
+
+        function resetNavigationState() {
+            realDrivingDistanceText = "-- km";
+            document.getElementById('distance-display').innerText = "Calcul...";
+            isRevealed = false;
+            
+            if(map && map.getSource('fog')) {
+                map.setLayoutProperty('fog-layer', 'visibility', 'visible');
+                if (currentMarker) { currentMarker.remove(); currentMarker = null; }
+                
+                if(userPos) {
+                    if(!isGPXMode) {
+                        getRoute(userPos); // Appel API Mapbox
+                    }
+                    updateAppLogic(userPos, 0);
+                }
+            }
+        }
+
+        // --- Parser GPX Simple ---
+        function handleGPXUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                try {
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(text, "text/xml");
+                    const trkpts = xmlDoc.getElementsByTagName("trkpt");
+                    
+                    if (trkpts.length === 0) {
+                        alert("Erreur : Aucun point trouvé dans ce fichier GPX.");
+                        return;
+                    }
+
+                    const coordinates = [];
+                    for (let i = 0; i < trkpts.length; i++) {
+                        const lat = parseFloat(trkpts[i].getAttribute("lat"));
+                        const lon = parseFloat(trkpts[i].getAttribute("lon"));
+                        coordinates.push([lon, lat]);
+                    }
+
+                    // Activation Mode GPX
+                    isGPXMode = true;
+                    gpxRouteGeoJSON = { type: 'LineString', coordinates: coordinates };
+                    
+                    // La destination devient le dernier point du GPX
+                    currentDestination = coordinates[coordinates.length - 1];
+
+                    alert("✅ GPX chargé ! Suivez la ligne bleue.");
+                    toggleMenu();
+                    
+                    // UI Update
+                    document.getElementById('nav-text').innerText = "Suivez la trace GPX";
+                    document.getElementById('nav-icon').innerHTML = '<i class="fas fa-route"></i>';
+                    
+                    resetNavigationState();
+
+                } catch (err) {
+                    console.error(err);
+                    alert("Erreur lors de la lecture du GPX.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('menu-content');
+            menu.classList.toggle('open');
+            const icon = document.querySelector('#menu-toggle i');
+            if (menu.classList.contains('open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+
+        function checkGPS() {
+            const gpsMsg = document.getElementById('gps-check-msg');
+            const btnStart = document.getElementById('btn-start');
+
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        userPos = [position.coords.longitude, position.coords.latitude];
+                        gpsMsg.innerHTML = "✅ Signal GPS acquis";
+                        gpsMsg.style.color = "#4cd137";
+                        btnStart.classList.remove('hidden');
+                    },
+                    (error) => {
+                        gpsMsg.innerHTML = "❌ GPS requis. Activez-le.";
+                        gpsMsg.style.color = "#ff4444";
+                    },
+                    { enableHighAccuracy: true }
+                );
+            } else {
+                gpsMsg.innerHTML = "GPS non supporté.";
+            }
+        }
+
+        function startNavigation() {
+            document.getElementById('start-overlay').classList.add('hidden');
+            document.getElementById('hud').classList.remove('hidden');
+            document.getElementById('menu-container').classList.remove('hidden');
+            if ('wakeLock' in navigator) { try { navigator.wakeLock.request('screen'); } catch (err) {} }
+            initMap();
+        }
+
+        function initMap() {
+            map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/navigation-night-v1', 
+                center: userPos,
+                zoom: 15,
+                pitch: 60,
+                bearing: 0,
+                interactive: false 
+            });
+
+            geolocateControl = new mapboxgl.GeolocateControl({
+                positionOptions: { enableHighAccuracy: true },
+                trackUserLocation: true,
+                showUserHeading: true
+            });
+            map.addControl(geolocateControl, 'bottom-right');
+
+            map.on('load', () => {
+                map.addSource('fog', { type: 'geojson', data: generateFogGeoJSON(userPos) });
+                map.addLayer({
+                    id: 'fog-layer',
+                    type: 'fill',
+                    source: 'fog',
+                    paint: { 'fill-color': '#000000', 'fill-opacity': 0.95 }
+                });
+
+                map.addSource('route', { type: 'geojson', data: { type: 'Feature', geometry: { type: 'LineString', coordinates: [] } } });
+                map.addLayer({
+                    id: 'route-line',
+                    type: 'line',
+                    source: 'route',
+                    layout: { 'line-join': 'round', 'line-cap': 'round' },
+                    paint: { 'line-color': '#3887be', 'line-width': 9, 'line-opacity': 0.8 },
+                    beforeId: 'fog-layer'
+                });
+
+                geolocateControl.trigger();
+
+                geolocateControl.on('geolocate', (e) => {
+                    const newUserPos = [e.coords.longitude, e.coords.latitude];
+                    map.easeTo({ pitch: 60 }); 
+                    updateAppLogic(newUserPos, e.coords.heading);
+                });
+            });
+        }
+
+        async function updateAppLogic(currentPos, heading) {
+            userPos = currentPos;
+
+            // Logique Distance
+            // Si GPX, on calcule la distance le long de la ligne (complexe en JS pur sans library lourde)
+            // Donc on reste sur la distance vol d'oiseau vers le dernier point pour l'instant, ou la distance API si pas GPX
+            const from = turf.point(userPos);
+            const to = turf.point(currentDestination);
+            const directDistance = turf.distance(from, to, { units: 'kilometers' });
+            
+            // Affichage distance
+            if(isGPXMode) {
+                // En mode GPX, on affiche la distance vol d'oiseau vers la fin
+                document.getElementById('distance-display').innerText = "Vol d'oiseau : " + directDistance.toFixed(1) + " km";
+            } else {
+                const displayDist = realDrivingDistanceText !== "-- km" ? realDrivingDistanceText : (directDistance.toFixed(1) + " km");
+                document.getElementById('distance-display').innerText = displayDist;
+            }
+
+            if (!isRevealed) {
+                map.getSource('fog').setData(generateFogGeoJSON(userPos));
+                if (directDistance <= VISIBILITY_RADIUS_KM) {
+                    triggerReveal();
+                }
+            }
+
+            // Logique Route
+            if (isGPXMode && gpxRouteGeoJSON) {
+                // En mode GPX, on n'appelle PAS l'API, on coupe juste notre GPX local
+                const visibleRouteGeo = isRevealed ? gpxRouteGeoJSON : clipRouteByDistance(gpxRouteGeoJSON, userPos, VISIBILITY_RADIUS_KM);
+                map.getSource('route').setData({
+                    type: 'Feature', properties: {}, geometry: visibleRouteGeo
+                });
+            } else {
+                // Mode Auto classique
+                const now = Date.now();
+                if (now - lastRouteFetchTime > 2000) {
+                    lastRouteFetchTime = now;
+                    getRoute(userPos);
+                }
+            }
+        }
+
+        function generateFogGeoJSON(center) {
+            const worldPolygon = [[[-180, 90], [180, 90], [180, -90], [-180, -90], [-180, 90]]];
+            const circle = turf.circle(center, VISIBILITY_RADIUS_KM, { steps: 64, units: 'kilometers' });
+            return { type: 'Feature', geometry: { type: 'Polygon', coordinates: [worldPolygon[0], circle.geometry.coordinates[0]] } };
+        }
+
+        async function getRoute(start) {
+            if(isGPXMode) return; // Sécurité
+
+            const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${currentDestination[0]},${currentDestination[1]}?steps=true&geometries=geojson&overview=full&access_token=${mapboxgl.accessToken}&language=fr`;
+            
+            try {
+                const response = await fetch(url);
+                const json = await response.json();
+                
+                if (json.routes && json.routes.length > 0) {
+                    const data = json.routes[0];
+                    
+                    const distMeters = data.distance;
+                    if (distMeters >= 1000) {
+                        realDrivingDistanceText = (distMeters / 1000).toFixed(1) + " km";
+                    } else {
+                        realDrivingDistanceText = Math.floor(distMeters) + " m";
+                    }
+                    
+                    if(!isGPXMode) {
+                        document.getElementById('distance-display').innerText = realDrivingDistanceText;
+                    }
+
+                    const fullRouteGeo = data.geometry;
+                    const visibleRouteGeo = isRevealed ? fullRouteGeo : clipRouteByDistance(fullRouteGeo, start, VISIBILITY_RADIUS_KM);
+                    
+                    map.getSource('route').setData({
+                        type: 'Feature', properties: {}, geometry: visibleRouteGeo
+                    });
+
+                    if (data.legs && data.legs[0].steps.length > 0) {
+                        const step = data.legs[0].steps[0];
+                        let instruction = step.maneuver.instruction;
+                        let type = step.maneuver.type; 
+                        let modifier = step.maneuver.modifier;
+
+                        if (step.distance < 30 && data.legs[0].steps[1]) {
+                            instruction = data.legs[0].steps[1].maneuver.instruction;
+                            type = data.legs[0].steps[1].maneuver.type;
+                            modifier = data.legs[0].steps[1].maneuver.modifier;
+                        }
+                        
+                        document.getElementById('nav-text').innerText = instruction;
+                        updateIcon(type, modifier);
+                    }
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        function clipRouteByDistance(geometry, userPos, maxDistKm) {
+            const coords = geometry.coordinates;
+            const visibleCoords = [];
+            const userPoint = turf.point(userPos);
+            
+            // Optimisation : On cherche le point du GPX le plus proche de l'utilisateur pour commencer le tracé là (optionnel mais mieux)
+            // Pour cette version simple, on affiche tout ce qui est dans le rayon de 2km
+            
+            for (let i = 0; i < coords.length; i++) {
+                if (turf.distance(userPoint, turf.point(coords[i]), { units: 'kilometers' }) <= maxDistKm) {
+                    visibleCoords.push(coords[i]);
+                } else { 
+                    // Astuce : Si on a déjà commencé à dessiner et qu'on sort du rayon, on arrête (fin du brouillard)
+                    // Mais si on a pas encore commencé (points derrière nous trop loin), on continue de chercher
+                    if(visibleCoords.length > 0) break; 
+                }
+            }
+            return { type: 'LineString', coordinates: visibleCoords };
+        }
+
+        function updateIcon(type, modifier) {
+            const iconEl = document.getElementById('nav-icon');
+            let iconClass = "fas fa-arrow-up"; 
+            if (type === 'turn') {
+                if (modifier?.includes('left')) iconClass = "fas fa-arrow-left";
+                else if (modifier?.includes('right')) iconClass = "fas fa-arrow-right";
+            } else if (type === 'roundabout') iconClass = "fas fa-sync";
+            else if (type === 'arrive') iconClass = "fas fa-flag-checkered";
+            iconEl.innerHTML = `<i class="${iconClass}"></i>`;
+        }
+
+        function triggerReveal() {
+            isRevealed = true;
+            map.setLayoutProperty('fog-layer', 'visibility', 'none');
+            
+            currentMarker = new mapboxgl.Marker({ color: 'red', scale: 1.2 })
+                .setLngLat(currentDestination)
+                .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML('<div class="reveal-popup"><h1>🎉 DESTINATION !</h1></div>'))
+                .addTo(map);
+            
+            currentMarker.togglePopup();
+            
+            document.getElementById('nav-text').innerText = "VOUS Y ÊTES !";
+            document.getElementById('nav-text').style.color = "#f1c40f";
+            map.dragPan.enable(); map.scrollZoom.enable(); map.touchZoomRotate.enable();
+            map.flyTo({ center: currentDestination, zoom: 14, pitch: 0 });
+        }
+    </script>
+</body>
+</html>

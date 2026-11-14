@@ -1,0 +1,317 @@
+{
+ "id": "noir",
+ "name": "Enquête noire",
+ "tagline": "Une ville. Une piste. Aucune adresse.",
+ "palette": {
+  "night": {
+   "background": "#0B0B0D",
+   "surface": "#151518",
+   "surfaceHigh": "#212126",
+   "primary": "#D7263D",
+   "onPrimary": "#FFFFFF",
+   "secondary": "#A9B1BC",
+   "text": "#ECE8E1",
+   "textMuted": "#8A8782",
+   "outline": "#3A3A40",
+   "success": "#9DB89A",
+   "danger": "#D7263D",
+   "route": "#D7263D",
+   "routeCasing": "#2A0509",
+   "puck": "#ECE8E1"
+  },
+  "day": {
+   "background": "#E7E2D6",
+   "surface": "#F3EFE5",
+   "surfaceHigh": "#D9D3C5",
+   "primary": "#A3151F",
+   "onPrimary": "#FFFFFF",
+   "secondary": "#3D4650",
+   "text": "#17171A",
+   "textMuted": "#5E5B55",
+   "outline": "#B4AEA0",
+   "success": "#3E6B46",
+   "danger": "#A3151F",
+   "route": "#A3151F",
+   "routeCasing": "#F3EFE5",
+   "puck": "#17171A"
+  }
+ },
+ "typography": {
+  "display": "fonts/PlayfairDisplay_900Black_Italic.ttf",
+  "instruction": "fonts/BebasNeue_400Regular.ttf",
+  "body": "fonts/SpecialElite_400Regular.ttf",
+  "bodyItalic": "fonts/SpecialElite_400Regular.ttf",
+  "bodyBold": "fonts/PlayfairDisplay_700Bold.ttf",
+  "displayUppercase": false,
+  "instructionUppercase": true,
+  "displayTracking": -0.02,
+  "instructionTracking": 0.03,
+  "displayScale": 0.92,
+  "instructionScale": 1.22
+ },
+ "shape": {
+  "corner": 2,
+  "card": "cut",
+  "border": 1.0
+ },
+ "decor": {
+  "background": "blinds",
+  "grain": 0.09,
+  "routeDash": []
+ },
+ "map": {
+  "night": {
+   "land": "#121214",
+   "water": "#050506",
+   "park": "#161819",
+   "building": "#1C1C20",
+   "roadMinor": "#2C2C31",
+   "roadMajor": "#77777E",
+   "roadCasing": "#0B0B0D",
+   "rail": "#26262A",
+   "label": "#A8A49C",
+   "labelHalo": "#0B0B0D"
+  },
+  "day": {
+   "land": "#DDD8CC",
+   "water": "#A4A9AD",
+   "park": "#CDCBBB",
+   "building": "#CBC5B8",
+   "roadMinor": "#F1EDE3",
+   "roadMajor": "#FFFFFF",
+   "roadCasing": "#A39E92",
+   "rail": "#B4AEA0",
+   "label": "#3A3936",
+   "labelHalo": "#EDE8DC"
+  },
+  "streetNames": true
+ },
+ "illustrations": {
+  "emblem": [
+   {
+    "d": "M16 42 A26 26 0 1 1 68 42 A26 26 0 1 1 16 42 Z",
+    "color": "text",
+    "alpha": 1.0,
+    "stroke": 5
+   },
+   {
+    "d": "M61 61 L88 88",
+    "color": "primary",
+    "alpha": 1.0,
+    "stroke": 10
+   },
+   {
+    "d": "M30 46 A12 12 0 0 1 54 46 M34 50 A8 8 0 0 1 50 50 M26 40 A16 16 0 0 1 58 40",
+    "color": "text",
+    "alpha": 0.55,
+    "stroke": 2.2
+   }
+  ],
+  "stage": [
+   {
+    "d": "M50 12 L86 86 L14 86 Z",
+    "color": "primary",
+    "alpha": 1.0,
+    "stroke": 5
+   },
+   {
+    "d": "M50 40 L50 62 M50 71 L50 74",
+    "color": "text",
+    "alpha": 1.0,
+    "stroke": 6
+   }
+  ],
+  "clue": [
+   {
+    "d": "M34 78 A22 30 0 0 1 28 44 A22 22 0 0 1 72 44 A30 40 0 0 1 68 80",
+    "color": "text",
+    "alpha": 1.0,
+    "stroke": 3
+   },
+   {
+    "d": "M40 82 A16 26 0 0 1 36 46 A14 14 0 0 1 64 46 A26 36 0 0 1 60 84",
+    "color": "text",
+    "alpha": 0.8,
+    "stroke": 3
+   },
+   {
+    "d": "M47 84 A8 20 0 0 1 44 48 A6 6 0 0 1 56 48 A20 30 0 0 1 53 86",
+    "color": "primary",
+    "alpha": 1.0,
+    "stroke": 3
+   },
+   {
+    "d": "M22 60 A30 34 0 0 1 22 40 A28 28 0 0 1 78 40 A36 44 0 0 1 77 70",
+    "color": "text",
+    "alpha": 0.6,
+    "stroke": 3
+   }
+  ],
+  "challenge": [
+   {
+    "d": "M22 14 L64 14 L80 30 L80 86 L22 86 Z M64 14 L64 30 L80 30",
+    "color": "text",
+    "alpha": 1.0,
+    "stroke": 4
+   },
+   {
+    "d": "M32 44 L70 44 M32 56 L70 56 M32 68 L56 68",
+    "color": "primary",
+    "alpha": 1.0,
+    "stroke": 4
+   }
+  ]
+ },
+ "sounds": {
+  "cue": "sounds/cue.wav",
+  "arrive": "sounds/arrive.wav",
+  "clue": "sounds/clue.wav",
+  "fail": "sounds/fail.wav"
+ },
+ "voice": {
+  "pitch": 0.7,
+  "rate": 0.9
+ },
+ "tone": {
+  "words": {
+   "host": "Commissaire",
+   "traveler": "Inspecteur",
+   "stage": "Scène",
+   "challenge": "Interrogatoire",
+   "clue": "Pièce à conviction",
+   "clueBook": "Dossier",
+   "trip": "Affaire"
+  },
+  "flavor": {
+   "DEPART": [
+    "L'affaire commence. Roulez.",
+    "La nuit est longue. On y va."
+   ],
+   "STRAIGHT": [
+    "Filez droit. Ne vous retournez pas.",
+    "La piste est encore chaude.",
+    "Rien à signaler. Continuez."
+   ],
+   "LEFT": [
+    "Le suspect a pris à gauche.",
+    "À gauche. Discrètement."
+   ],
+   "RIGHT": [
+    "Le suspect a pris à droite.",
+    "À droite. Sans vous presser."
+   ],
+   "ROUNDABOUT": [
+    "Il tourne en rond. Pas vous.",
+    "Semez-les dans le rond-point."
+   ],
+   "UTURN": [
+    "Fausse piste. On rebrousse chemin."
+   ],
+   "ARRIVE": [
+    "On brûle.",
+    "Ralentissez. C'est tout près."
+   ]
+  },
+  "narration": {
+   "welcome": "Dossier confidentiel. On ne vous dira pas où ça finit. Suivez la piste.",
+   "waitingGps": "On vous localise…",
+   "stageArrived": "Scène atteinte.",
+   "stageArrivedSub": "Le commissaire a laissé une note sur place.",
+   "nextLeg": "La piste reprend",
+   "clueUnlocked": "Nouvelle pièce au dossier.",
+   "challengeSuccess": "Bien vu, inspecteur.",
+   "challengeFail": "Fausse piste. Ça arrive aux meilleurs.",
+   "offRoute": "Vous avez perdu la piste. On la retrouve…",
+   "offRouteOffline": "Piste perdue. Faites demi-tour dès que possible.",
+   "finale": "Affaire classée.",
+   "finaleSub": "C'était donc ici. Vous avez remonté toute la piste.",
+   "liveMessage": "Message du commissariat.",
+   "pendingSync": "Note sous scellés : elle s'ouvrira au retour du réseau."
+  },
+  "audiences": {
+   "KIDS": {
+    "words": {
+     "traveler": "Détective",
+     "challenge": "Mission"
+    },
+    "narration": {
+     "welcome": "Détective, une affaire mystérieuse t'attend ! Suis les indices.",
+     "challengeFail": "Raté ! Un bon détective ne se décourage jamais."
+    }
+   },
+   "COUPLE": {
+    "words": {
+     "traveler": "Mon complice"
+    },
+    "narration": {
+     "welcome": "Je ne te dirai rien. Pas même sous la torture. Suis la piste."
+    }
+   }
+  },
+  "suggestions": {
+   "KIDS": [
+    {
+     "kind": "QUIZ",
+     "prompt": "Avec quoi un détective regarde-t-il les empreintes ?",
+     "options": [
+      "Une loupe",
+      "Une fourchette",
+      "Un parapluie"
+     ],
+     "correctOption": 0
+    },
+    {
+     "kind": "PHOTO",
+     "prompt": "Photographie un indice : quelque chose de bizarre autour de toi !"
+    }
+   ],
+   "FRIENDS": [
+    {
+     "kind": "RIDDLE",
+     "prompt": "On me prend sans me toucher, on me garde sans me tenir. Qui suis-je ?",
+     "acceptedAnswers": [
+      "photo",
+      "une photo",
+      "la photo"
+     ]
+    },
+    {
+     "kind": "MISSION",
+     "prompt": "Photo de filature : l'un de vous caché derrière un journal (ou ce qui y ressemble)."
+    },
+    {
+     "kind": "FIND_ON_SITE",
+     "prompt": "Relevez le numéro de la plaque la plus proche.",
+     "acceptedAnswers": []
+    }
+   ],
+   "COUPLE": [
+    {
+     "kind": "FREE_TEXT",
+     "prompt": "Alibi : que faisions-nous le soir de notre premier rendez-vous ?",
+     "acceptedAnswers": []
+    },
+    {
+     "kind": "PHOTO",
+     "prompt": "Photo d'identité judiciaire : vous deux, de profil."
+    }
+   ],
+   "ADULTS": [
+    {
+     "kind": "RIDDLE",
+     "prompt": "Je parle sans bouche et j'entends sans oreilles. Je n'ai pas de corps mais le vent me réveille. Qui suis-je ?",
+     "acceptedAnswers": [
+      "echo",
+      "l'echo",
+      "un echo"
+     ]
+    },
+    {
+     "kind": "FIND_ON_SITE",
+     "prompt": "Quel nom figure sur la plaque commémorative ?",
+     "acceptedAnswers": []
+    }
+   ]
+  }
+ }
+}

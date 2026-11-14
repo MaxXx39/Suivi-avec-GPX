@@ -1,0 +1,408 @@
+{
+ "id": "pirates",
+ "name": "Chasse au trésor",
+ "tagline": "Cap sur l'inconnu. Le trésor n'attend pas.",
+ "palette": {
+  "night": {
+   "background": "#0A1418",
+   "surface": "#11222A",
+   "surfaceHigh": "#1A323B",
+   "primary": "#E9B44C",
+   "onPrimary": "#1B1202",
+   "secondary": "#D4593B",
+   "text": "#F4E9CF",
+   "textMuted": "#8FA5A0",
+   "outline": "#2E4750",
+   "success": "#8DBE74",
+   "danger": "#E4572E",
+   "route": "#E9B44C",
+   "routeCasing": "#3B2A08",
+   "puck": "#F4E9CF"
+  },
+  "day": {
+   "background": "#EBDDBB",
+   "surface": "#F6ECD2",
+   "surfaceHigh": "#E2D0A6",
+   "primary": "#8C2F1B",
+   "onPrimary": "#FFF4DC",
+   "secondary": "#1F5C63",
+   "text": "#2B1D0E",
+   "textMuted": "#6E5A3E",
+   "outline": "#BFA878",
+   "success": "#3F7A3A",
+   "danger": "#A3261A",
+   "route": "#8C2F1B",
+   "routeCasing": "#F6ECD2",
+   "puck": "#2B1D0E"
+  }
+ },
+ "typography": {
+  "display": "fonts/PirataOne_400Regular.ttf",
+  "instruction": "fonts/Alegreya_800ExtraBold.ttf",
+  "body": "fonts/Alegreya_400Regular.ttf",
+  "bodyItalic": "fonts/Alegreya_400Regular_Italic.ttf",
+  "bodyBold": "fonts/Alegreya_700Bold.ttf",
+  "displayUppercase": false,
+  "instructionUppercase": false,
+  "displayTracking": 0.01,
+  "instructionTracking": -0.01,
+  "displayScale": 1.0,
+  "instructionScale": 1.0
+ },
+ "shape": {
+  "corner": 10,
+  "card": "parchment",
+  "border": 1.5
+ },
+ "decor": {
+  "background": "waves",
+  "grain": 0.05,
+  "routeDash": [
+   1.2,
+   1.6
+  ]
+ },
+ "map": {
+  "night": {
+   "land": "#13262C",
+   "water": "#071015",
+   "park": "#17322B",
+   "building": "#1B333A",
+   "roadMinor": "#33484F",
+   "roadMajor": "#9C7A36",
+   "roadCasing": "#0A1418",
+   "rail": "#2A3E45",
+   "label": "#BFAE86",
+   "labelHalo": "#0A1418"
+  },
+  "day": {
+   "land": "#E8D9B2",
+   "water": "#9FBDB6",
+   "park": "#D3CC95",
+   "building": "#D9C596",
+   "roadMinor": "#C2A973",
+   "roadMajor": "#7A4A22",
+   "roadCasing": "#F3E8CB",
+   "rail": "#B79F6C",
+   "label": "#5A4022",
+   "labelHalo": "#F3E8CB"
+  },
+  "streetNames": true
+ },
+ "illustrations": {
+  "emblem": [
+   {
+    "d": "M50 6 A44 44 0 1 1 49.9 6 Z",
+    "color": "primary",
+    "alpha": 0.55,
+    "stroke": 1.4
+   },
+   {
+    "d": "M50 12 A38 38 0 1 1 49.9 12 Z",
+    "color": "primary",
+    "alpha": 0.25,
+    "stroke": 0.8
+   },
+   {
+    "d": "M71.2 28.8 L50.0 41.0 L50 50 Z",
+    "color": "primary",
+    "alpha": 0.45,
+    "stroke": 0.0
+   },
+   {
+    "d": "M71.2 28.8 L59.0 50.0 L50 50 Z",
+    "color": "primary",
+    "alpha": 0.8,
+    "stroke": 0.0
+   },
+   {
+    "d": "M71.2 71.2 L59.0 50.0 L50 50 Z",
+    "color": "primary",
+    "alpha": 0.45,
+    "stroke": 0.0
+   },
+   {
+    "d": "M71.2 71.2 L50.0 59.0 L50 50 Z",
+    "color": "primary",
+    "alpha": 0.8,
+    "stroke": 0.0
+   },
+   {
+    "d": "M28.8 71.2 L50.0 59.0 L50 50 Z",
+    "color": "primary",
+    "alpha": 0.45,
+    "stroke": 0.0
+   },
+   {
+    "d": "M28.8 71.2 L41.0 50.0 L50 50 Z",
+    "color": "primary",
+    "alpha": 0.8,
+    "stroke": 0.0
+   },
+   {
+    "d": "M28.8 28.8 L41.0 50.0 L50 50 Z",
+    "color": "primary",
+    "alpha": 0.45,
+    "stroke": 0.0
+   },
+   {
+    "d": "M28.8 28.8 L50.0 41.0 L50 50 Z",
+    "color": "primary",
+    "alpha": 0.8,
+    "stroke": 0.0
+   },
+   {
+    "d": "M50.0 4.0 L42.2 42.2 L50 50 Z",
+    "color": "text",
+    "alpha": 1.0,
+    "stroke": 0.0
+   },
+   {
+    "d": "M50.0 4.0 L57.8 42.2 L50 50 Z",
+    "color": "primary",
+    "alpha": 1.0,
+    "stroke": 0.0
+   },
+   {
+    "d": "M96.0 50.0 L57.8 42.2 L50 50 Z",
+    "color": "text",
+    "alpha": 1.0,
+    "stroke": 0.0
+   },
+   {
+    "d": "M96.0 50.0 L57.8 57.8 L50 50 Z",
+    "color": "primary",
+    "alpha": 1.0,
+    "stroke": 0.0
+   },
+   {
+    "d": "M50.0 96.0 L57.8 57.8 L50 50 Z",
+    "color": "text",
+    "alpha": 1.0,
+    "stroke": 0.0
+   },
+   {
+    "d": "M50.0 96.0 L42.2 57.8 L50 50 Z",
+    "color": "primary",
+    "alpha": 1.0,
+    "stroke": 0.0
+   },
+   {
+    "d": "M4.0 50.0 L42.2 57.8 L50 50 Z",
+    "color": "text",
+    "alpha": 1.0,
+    "stroke": 0.0
+   },
+   {
+    "d": "M4.0 50.0 L42.2 42.2 L50 50 Z",
+    "color": "primary",
+    "alpha": 1.0,
+    "stroke": 0.0
+   },
+   {
+    "d": "M50 46 A4 4 0 1 1 49.9 46 Z",
+    "color": "background",
+    "alpha": 1.0,
+    "stroke": 0.0
+   }
+  ],
+  "stage": [
+   {
+    "d": "M26 24 L74 76 M74 24 L26 76",
+    "color": "secondary",
+    "alpha": 1.0,
+    "stroke": 11
+   },
+   {
+    "d": "M8 88 C22 80 30 92 44 84",
+    "color": "text",
+    "alpha": 0.7,
+    "stroke": 2.4
+   },
+   {
+    "d": "M56 86 C68 80 78 90 92 84",
+    "color": "text",
+    "alpha": 0.7,
+    "stroke": 2.4
+   }
+  ],
+  "clue": [
+   {
+    "d": "M16 50 A13 13 0 1 1 42 50 A13 13 0 1 1 16 50 Z",
+    "color": "primary",
+    "alpha": 1.0,
+    "stroke": 6
+   },
+   {
+    "d": "M42 50 L88 50 M70 50 L70 64 M82 50 L82 61",
+    "color": "primary",
+    "alpha": 1.0,
+    "stroke": 6
+   }
+  ],
+  "challenge": [
+   {
+    "d": "M50 10 L61 38 L91 40 L68 59 L76 88 L50 72 L24 88 L32 59 L9 40 L39 38 Z",
+    "color": "primary",
+    "alpha": 1.0,
+    "stroke": 4
+   }
+  ]
+ },
+ "sounds": {
+  "cue": "sounds/cue.wav",
+  "arrive": "sounds/arrive.wav",
+  "clue": "sounds/clue.wav",
+  "fail": "sounds/fail.wav"
+ },
+ "voice": {
+  "pitch": 0.85,
+  "rate": 0.95
+ },
+ "tone": {
+  "words": {
+   "host": "Capitaine",
+   "traveler": "Moussaillon",
+   "stage": "Escale",
+   "challenge": "Épreuve",
+   "clue": "Fragment de carte",
+   "clueBook": "Carnet de bord",
+   "trip": "Expédition"
+  },
+  "flavor": {
+   "DEPART": [
+    "Larguez les amarres !",
+    "Hissez les voiles, on appareille."
+   ],
+   "STRAIGHT": [
+    "Cap droit devant, le vent est bon.",
+    "Gardez le cap, matelot.",
+    "Mer calme. Tenez la barre."
+   ],
+   "LEFT": [
+    "Barre à bâbord !",
+    "À bâbord toute !"
+   ],
+   "RIGHT": [
+    "Barre à tribord !",
+    "À tribord toute !"
+   ],
+   "ROUNDABOUT": [
+    "Un tourbillon ! Tenez bon la barre.",
+    "Contournez le récif."
+   ],
+   "UTURN": [
+    "Virez de bord !"
+   ],
+   "ARRIVE": [
+    "Terre en vue…",
+    "Sortez la longue-vue, on approche."
+   ]
+  },
+  "narration": {
+   "welcome": "Bienvenue à bord. Nul ne sait où mène cette carte… sauf le capitaine.",
+   "waitingGps": "On cherche l'étoile Polaire…",
+   "stageArrived": "Terre en vue !",
+   "stageArrivedSub": "Vous avez touché l'escale. Le capitaine vous a laissé un message.",
+   "nextLeg": "On reprend la mer",
+   "clueUnlocked": "Un fragment de la carte au trésor !",
+   "challengeSuccess": "Par tous les sabords, bien joué !",
+   "challengeFail": "Raté… même les meilleurs corsaires s'échouent parfois.",
+   "offRoute": "Vous dérivez ! On recalcule le cap…",
+   "offRouteOffline": "Vous dérivez ! Virez de bord dès que possible.",
+   "finale": "Le trésor est ici.",
+   "finaleSub": "La croix sur la carte, c'était cet endroit. Fin de l'expédition.",
+   "liveMessage": "Une bouteille à la mer !",
+   "pendingSync": "Message scellé : il s'ouvrira dès que le réseau reviendra."
+  },
+  "audiences": {
+   "KIDS": {
+    "words": {
+     "traveler": "Petit pirate"
+    },
+    "narration": {
+     "welcome": "Ohé petit pirate ! Une carte secrète nous emmène vers un trésor…",
+     "challengeFail": "Oups ! Ce n'est pas grave, petit pirate.",
+     "stageArrivedSub": "Bravo ! Le capitaine a caché un message ici."
+    }
+   },
+   "COUPLE": {
+    "words": {
+     "traveler": "Ma vigie"
+    },
+    "narration": {
+     "welcome": "Embarque. Je garde le cap secret, tu gardes les yeux ouverts."
+    }
+   }
+  },
+  "suggestions": {
+   "KIDS": [
+    {
+     "kind": "QUIZ",
+     "prompt": "De quelle couleur est le drapeau des pirates ?",
+     "options": [
+      "Noir",
+      "Rose",
+      "Vert"
+     ],
+     "correctOption": 0
+    },
+    {
+     "kind": "PHOTO",
+     "prompt": "Prends en photo quelque chose de rouge comme un perroquet !"
+    },
+    {
+     "kind": "FIND_ON_SITE",
+     "prompt": "Trouve un chiffre sur un panneau tout près. Lequel ?",
+     "acceptedAnswers": []
+    }
+   ],
+   "FRIENDS": [
+    {
+     "kind": "RIDDLE",
+     "prompt": "J'ai des aiguilles mais ne pique pas, je montre toujours le nord. Qui suis-je ?",
+     "acceptedAnswers": [
+      "boussole",
+      "une boussole",
+      "compas"
+     ]
+    },
+    {
+     "kind": "MISSION",
+     "prompt": "Photo d'équipage : tout le monde avec un œil fermé, façon bandeau de pirate."
+    },
+    {
+     "kind": "FIND_ON_SITE",
+     "prompt": "Quelle année est gravée sur le monument le plus proche ?",
+     "acceptedAnswers": []
+    }
+   ],
+   "COUPLE": [
+    {
+     "kind": "FREE_TEXT",
+     "prompt": "Où nous sommes-nous dit bonjour pour la première fois ?",
+     "acceptedAnswers": []
+    },
+    {
+     "kind": "PHOTO",
+     "prompt": "Un selfie à deux avec l'horizon derrière vous."
+    }
+   ],
+   "ADULTS": [
+    {
+     "kind": "RIDDLE",
+     "prompt": "Plus j'ai de gardiens, moins je suis gardé. Qui suis-je ?",
+     "acceptedAnswers": [
+      "secret",
+      "un secret"
+     ]
+    },
+    {
+     "kind": "FIND_ON_SITE",
+     "prompt": "Relevez le mot écrit au-dessus de la porte principale.",
+     "acceptedAnswers": []
+    }
+   ]
+  }
+ }
+}

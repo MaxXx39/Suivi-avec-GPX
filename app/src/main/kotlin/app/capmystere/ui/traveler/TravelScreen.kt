@@ -248,7 +248,7 @@ private fun Fog(closed: Boolean) {
     }
     Canvas(Modifier.fillMaxSize()) {
         val center = Offset(size.width / 2, size.height * PUCK_Y_FRACTION)
-        val radius = size.width * (0.92f + 0.025f * breath) * open + 1f
+        val radius = size.width * (0.80f + 0.02f * breath) * open + 1f
         drawRect(Brush.radialGradient(0f to Color.Transparent, 0.48f to Color.Transparent, 0.82f to fog.copy(alpha = 0.86f), 1f to fog, center = center, radius = radius))
         // Voile haut et bas pour asseoir l'instruction et la barre d'actions.
         drawRect(Brush.verticalGradient(0f to fog, 0.30f to Color.Transparent, 0.74f to Color.Transparent, 1f to fog))
